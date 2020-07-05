@@ -1,0 +1,150 @@
+﻿
+
+
+
+@using Microsoft.AspNet.Identity
+@using CustomComputers.Models
+@{ 
+
+    //the following block of code gets the identity of a logged in user and casts them as a customer
+    //then it finds an unpaid order for a customer aand displays a nuber of orderlines in an image in the navbar
+    
+    ApplicationDbContext db = new ApplicationDbContext();
+
+    string userId = User.Identity.GetUserId();
+
+    User u = null;
+    Customer c =null;
+    CustomerOrder o = null;
+    int badge = 0;
+    if(userId != null) //if no user is logged in this wont execute
+    {
+        u = db.Users.Find(userId);//user is found
+
+
+        if (u != null)
+        {
+            c = (Customer)u;//cast as Customer
+
+
+            if (c != null)
+            {
+                o = c.getOrder(c.Id);//gets unpaid order
+                o.BasketItems = o.GetItems(o.Id);//gets the orderlines of this order
+
+                c.Orders.Add(o);//adds the order to the customer object
+
+                if (o.BasketItems != null)//if there are items in the customers basket (orderlines) an image will show this number
+                {
+                    badge = o.BasketItems.Count();
+                }
+
+            }
+        }
+    }
+
+}
+
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+    <ul class="nav navbar-nav navbar-right">
+        @if (u != null && u.Role.Equals("Manager"))//shows if a manager is logged in
+        {
+            <li>
+                @Html.ActionLink("Change User Roles", "ChangeUserRoles", "User")
+            </li>
+
+        }
+        @if (u != null && u.Role.Equals("StockController") || u.Role.Equals("Manager"))//shows for managers and stockControllers
+        {
+            <li>
+                @Html.ActionLink("Stock Page", "StockPage", "Product")
+            </li>
+
+            <li>
+                @Html.ActionLink("Add Product", "AddProduct", "Product")
+            </li>
+
+        }
+        @if (u != null && u.Role.Equals("Manager") || u != null && u.Role.Equals("Staff") || u != null && u.Role.Equals("Customer"))//shows for managers staff and customers
+        {
+            <li>
+                @Html.ActionLink("View Previous Orders", "SeeOrders", "Order")
+            </li>
+        }
+        <li>
+            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "EditUser", "User")@*//greating message*@
+        </li>
+        
+        @if (u != null && u.Role.Equals("Customer"))//shows for customer
+        {
+            <li class="container2">
+                @*this image changes on cursor hover and when clicked it redirects to the viewBasket page*@
+                <img src="@Url.Content("~/Content/Images/shopping-basket.png")" onclick="sendToBasket()" onmouseover="imageHover(this)" onmouseout="normalImage(this)" id="basket">
+
+                @if (badge > 0)//this will show the number of orderlines or items in a users basket and when clicked it redirects to the viewBasket page
+                {
+
+                    <span class="container2 badge" onclick="sendToBasket()" onmouseover="badgeHover()" onmouseout="normalBadge()" id="badge">
+                        @badge
+                    </span>
+
+                }
+            </li>
+        }
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+    </ul>
+    }
+}
+else// if no user is logged in these tow links will show
+{
+
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+
+
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}
+
+
+
+<script>
+   
+    //this function replaces the yellow basket image with a white one when the cursor hovers over it
+    function imageHover(x) {
+        x.src = "@Url.Content("~/Content/Images/shopping-basket-hover.png")";
+        var badge = document.getElementById("badge");
+        badge.style.color = "black";
+        
+    }
+    //this function replaces the white basket image with the yellow on when the cursor moves away from it
+    function normalImage(x) {
+        x.src = "@Url.Content("~/Content/Images/shopping-basket.png")";
+        var badge = document.getElementById("badge");
+        badge.style.color = "#575757";
+    }
+
+    //when the cursor hovers over the badge displaying the basket items quantity the whicte basket image is shown
+    function badgeHover() {
+        var x = document.getElementById("basket");
+        x.src = "@Url.Content("~/Content/Images/shopping-basket-hover.png")";
+        badge.style.color = "black";
+    }
+
+    //displays image when mouse moves away
+    function normalBadge() {
+        var x = document.getElementById("basket");
+        x.src = "@Url.Content("~/Content/Images/shopping-basket.png")";
+        badge.style.color = "#575757";
+    }
+
+    //this redirects to the view Basket page 
+    function sendToBasket() {
+     window.location.href = '@Url.Action("ViewBasket", "User")';
+    }
+</script>

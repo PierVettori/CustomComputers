@@ -1,0 +1,111 @@
+﻿
+
+
+@using CustomComputers.Models
+@{
+    Customer c = ViewBag.Customer;//customer object from the back
+
+    
+    //these two counters will help find order Id 
+    int counter = 0;
+
+    int counter2 = 1;
+
+}
+
+<h1> All Orders</h1>
+@using (Html.BeginForm("ProcessCustomerOrders", "Order", FormMethod.Get))
+{
+    //this hiden input will hold the OrderId for a particular order to be requested by the back
+    <input type="hidden" name="orderId" id="orderId" />
+
+    if (c != null)
+    {
+        foreach (CustomerOrder o in c.Orders)
+        {
+            
+                counter++;
+                counter2 = counter * 10000;
+
+                <div id="ViewOrder">
+                <div>
+                    Date: @o.Date.ToShortDateString()
+                </div>
+                <div>
+                    Total: @o.Total
+                </div>
+                <div>
+                    @o.BasketItems.Count() Items
+                </div>
+                <div>
+                    @*this is the button that will show an orders information*@
+                    <input class="ViewOrderButton" type="button" value="View Order" onclick="show(@counter)" />
+                    <input type="hidden" value="@o.Id" id="@counter2" />
+                    @if (o.Date > DateTime.Now.AddDays(-14))
+                    {
+                        <input class="ViewOrderButton" type="submit" name="Cancel" value="Cancel Order" onclick="getOrderId(@counter2)" />
+                    }
+
+                </div>
+            </div>
+            //this is a hidden part of the page that will show up if the view order button is clicked
+            <div id=@counter class="picturePicturPicture">
+                @foreach (Basket b in o.BasketItems)
+                {
+                    <table class="table">
+                        <tr>
+                            <td>
+                                @b.Product.Name
+                            </td>
+                            <td>
+                                Quantity: @b.Quantity
+                            </td>
+                            <td>
+                                £ @b.Product.Price
+                            </td>
+                            <td>
+                                <img src="@Url.Content(b.Product.Image)" height="100" width="100" />
+                            </td>
+                        </tr>
+                    </table>
+                }
+            </div>
+
+
+
+
+            
+
+
+        }
+    }
+
+}
+
+<script>
+    //this function shows details of an order by changing the display setting in its css
+    function show(i) {
+
+        var picture = document.getElementById(i);
+
+        if (picture.style.display === "unset") {
+            picture.style.display = "none";
+        }
+        else {
+            picture.style.display = "unset";
+        }
+
+    }
+    //this gets a particular orders id and sets the top hidden input to that value
+    function getOrderId(i) {
+        var x = document.getElementById(i).value
+        var id = document.getElementById("orderId");
+        id.value = x;
+    }
+
+
+
+
+
+
+</script>

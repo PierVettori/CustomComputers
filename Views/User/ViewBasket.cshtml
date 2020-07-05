@@ -1,0 +1,104 @@
+﻿@using CustomComputers.Models
+@{
+   // List<Card> cards = ViewBag.Cards;
+
+    CustomerOrder o = ViewBag.Order;
+    int counter = 1;
+}
+
+
+@if (o != null)
+{
+   
+    <h2>ViewBasket</h2>
+        using (Html.BeginForm("ProcessBasket", "User", FormMethod.Get))
+        {
+
+
+            <input type="hidden" name="basketId" value="" id="basketId" />
+
+
+            <table class="table">
+
+
+
+                <tr>
+                    <th>Order Total</th>
+                    <td>
+                        @o.Total
+                    </td>
+                   
+                   
+                <td>
+                    @if (o.Total > 0 )
+                    {
+
+                        <input class="customButton" type="submit" name="Checkout" value="Checkout" id="b" />
+                    }
+                   
+                </td>
+                </tr>
+
+
+            @foreach (Basket b in o.BasketItems)
+            {
+                counter++;
+
+                <tr>
+                    <td>
+                        <img src="@Url.Content(b.Product.Image)" height="100" width="100" />
+                    </td>
+                    <td>
+                        Product:    @b.Product.Name
+                    </td>
+                    <td>
+                        Quantity:  @b.Quantity
+                    </td>
+                    <td>
+                        Price:  £@b.Product.Price
+                    </td>
+                    <td>
+                        
+                        <input type="hidden" class="customButton" value="" name="@b.Id" id="@counter" />
+                        <input type="submit" class="customButton" name="RemoveProduct" value="RemoveProduct" onclick="find(@counter)" />
+                    </td>
+                   
+                </tr>
+
+            }
+
+
+            </table>
+        }
+
+    
+}
+else
+{
+    <h2>no items in your basket</h2>
+
+    <div>
+        <div>
+            <div style="padding-top:30px">
+                
+                <a class="customButton" >@Html.ActionLink("Back to Shop", "Index", "Home")</a>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    
+    //this finds an input with a certain Id - one of the incremented counters
+    //then changes the value of one of the top hidden inputs to the value of the input with incremented counters
+    
+
+    function find(i) {
+        var x = document.getElementById(i).name
+        var prodId = document.getElementById("basketId");
+        prodId.value = x;
+
+    }
+
+
+</script>

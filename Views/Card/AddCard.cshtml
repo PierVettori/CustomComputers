@@ -1,0 +1,68 @@
+﻿@model CustomComputers.Models.Card
+
+@using CustomComputers.Models
+@{
+    Customer customer = ViewBag.Customer;
+
+
+}
+<h2>AddCard</h2>
+
+@using (Html.BeginForm("ProcessAddCard", "Card", FormMethod.Get))
+{
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" value="@customer.Id" name="customerId" />
+
+    if (customer != null)
+    {
+
+
+
+        <div id="CustomCustomCustom">
+
+            <div>Card Number: </div>
+            <div>@Html.TextBoxFor(m => m.CardNumber, new { @class = "textInput" })</div>
+        </div>
+        <div id="CustomCustomCustom">
+
+            <div>Card Holder:</div>
+            <div>@Html.TextBoxFor(m => m.CardHolder, new { @class = "textInput" })</div>
+        </div>
+        <div id="CustomCustomCustom">
+
+            <div>Expiry Date:</div>
+            <div>@Html.TextBoxFor(m => m.ExpiryDate, new { @class = "textInput" })</div>
+        </div>
+        <div id="CustomCustomCustom">
+
+            <div>Address Line 1:</div>
+            <div>@Html.TextBoxFor(m => m.AddressLn1, new { @class = "textInput" })</div>
+        </div>
+
+        <div id="CustomCustomCustom">
+
+
+            <div>Address Line 2: </div>
+            <div>@Html.TextBoxFor(m => m.AddressLn2, new { @class = "textInput" })</div>
+        </div>
+
+        <div id="CustomCustomCustom">
+
+
+            <div>Postcode:</div>
+            <div>@Html.TextBoxFor(m => m.PostCode, new { @class = "textInput" })</div>
+        </div>
+
+        <div>
+            <input class="customButton yellow" type="submit" value="Save changes" />
+        </div>
+
+
+
+    }
+
+
+}
+
+

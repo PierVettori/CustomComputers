@@ -1,0 +1,116 @@
+﻿@using CustomComputers.Models
+@model Product
+@{
+    //the next block of code deals with images being uploaded by the user
+    
+
+    WebImage photo = null;
+    var newFileName = "";
+    var imagePath = "";
+    string strPath = "";
+
+    if (IsPost)
+    {
+        photo = WebImage.GetImageFromRequest();//gets the image
+        if (photo != null)//checks there is an image
+        {
+            newFileName = Path.GetFileName(photo.FileName);//gets the name of the image
+            imagePath = "~/Content/Images" + newFileName;//creats a path to find the image
+
+            strPath = Server.MapPath(Url.Content("~/Content/Images/")) + newFileName;//tells the server to save the image
+            photo.Save(strPath);
+
+            
+        }
+    }
+
+    string path = "~/Content/Images/" + newFileName; //a file path to find an image
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Upload</title>
+</head>
+<body>
+    <div id="CustomCustomCustom" style="padding-top:80px !important; padding-bottom:80px !important;">
+        <form action="" method="post" enctype="multipart/form-data">
+            <fieldset class="customButton">
+                <legend> Upload Image </legend>
+                <label for="Image">Image</label>
+                <input type="file" name="Image" />
+                <br />
+                <input type="submit" value="Upload" />
+            </fieldset>
+        </form>
+        @if (imagePath == "")
+        {
+            <h1 style="font-size:16px !important">Uploaded Image</h1>
+        }
+        @if (imagePath != "")
+        {
+            <div class="result" style=" padding-top:10px; padding-right:80px !important; padding-left:80px !important;">
+                <img src="~/Content/Images/@newFileName" height="130" width="130" />
+
+            </div>
+        }
+    </div>
+</body>
+</html>
+
+@using (Html.BeginForm("AddProduct", "Product", FormMethod.Get))
+{
+    <div style="padding-top:40px">
+
+    </div>
+<div id="CustomCustomCustom">
+    Name:
+    <div>
+        @Html.TextBoxFor(m => m.Name, new { @class = "textInput"  })
+    </div>
+</div>
+
+    <div id="CustomCustomCustom">
+        <label for="drop">Please choose a category:</label>
+
+        <select id="drop" name="drop" value="drop">
+
+            @foreach (ProductCategory pc in ViewBag.Categories)
+            {
+                <option value="@pc.Id">@pc.Name</option>
+            }
+
+
+        </select>
+    </div>
+
+
+
+    <div id="CustomCustomCustom">
+        Price:
+        <div>
+            @Html.TextBoxFor(m => m.Price, new { @class = "textInput" })
+        </div>
+    </div>
+
+    <div id="CustomCustomCustom">
+       Stock:
+        <div>
+            @Html.TextBoxFor(m => m.Stock, new { @class = "textInput" })
+        </div>
+    </div>
+
+    <div id="CustomCustomCustom">
+
+        <div>
+            <b>@Html.HiddenFor(m => m.Image, new { @class = "textInput", @Value = path })</b>
+        </div>
+    </div>
+
+
+    <div id="CustomCustomCustom">
+        <div>
+            <input class="customButton" type="submit" value="Create" />
+        </div>
+    </div>
+
+}

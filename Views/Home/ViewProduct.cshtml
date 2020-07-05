@@ -1,0 +1,425 @@
+﻿
+@using CustomComputers.Models
+@model Product
+
+@{
+    Product p = ViewBag.Product;//Product from the front
+    string msg = "";//a message to indicate lack of stock to be populated later
+
+    double rating = 0; //do display average user rating
+                       //this next block of code is responsible for describing the numbers to be found in the dropdown list for a user to select a quantity of product to add to basket
+    int allowedQuant = p.Stock;//
+
+    if (p.Stock > 10)//if there is plenty of stock a user can add up to 10 of a particular product at a time
+    {
+        allowedQuant = 10;
+    }
+
+
+
+
+}
+
+
+<h2>@p.Name</h2>
+<div style="padding-left:25%">
+    <img src="@Url.Content(p.Image)" height="300" width="300" />
+</div>
+@using (Html.BeginForm("ProcessProduct", "Home", FormMethod.Get))
+{
+    //this hiden input will hold the star rating value for a newly made review
+    <input type="hidden" name="rating" id="rating" value="0" />
+
+    //these next hidden inputs will be used by the back to creat a product object
+    @Html.HiddenFor(m => m.Id, new { @class = "form-control" })
+    @Html.HiddenFor(m => m.Name, new { @class = "form-control" })
+    @Html.HiddenFor(m => m.Price, new { @class = "form-control" })
+    @Html.HiddenFor(m => m.Stock, new { @class = "form-control" })
+    @Html.HiddenFor(m => m.Image, new { @class = "form-control" })
+    @Html.HiddenFor(m => m.CategoryId, new { @class = "form-control" })
+
+    //this message will display lov stock levels
+    <section class="ViewProdProdProd">
+
+        <div class="ViewProdProdProd">
+            @if (p.Stock < 10)
+            {
+                msg = "Only " + p.Stock + " left in Stock";
+            }
+            @msg
+        </div>
+
+    </section>
+
+    //this shows the average user rating of a product
+    <section class="ViewProdProdProd">
+        <div class="ViewProdProdProd">
+            £@p.Price.ToString("0.00")
+        </div>
+        <div class="ViewProdProdProd">
+            @foreach (Review r in p.Reviews)
+            {
+                rating = rating + r.Rating;
+            }
+            @{rating = rating / p.Reviews.Count(); }
+            Average User Rating: @Math.Round(rating, 1)
+        </div>
+
+
+    </section>
+    //this is the dropdown list that users can select a quantity of product to purchase.
+    //it will never display more than there is stock of a product
+    if (p.Stock > 0)
+    {
+        <div class="dropDropDrop">
+            <label for="drop">Please choose a Quantity:</label>
+
+            <select id="drop" name="drop" value="drop">
+                @for (int i = 1; i <= allowedQuant; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+
+
+
+
+            </select>
+        </div>
+    }
+    //this button and predictive search bar will apear if a user is in the Manager or Staff role
+    //it allows a user to add products to a customers basket on the customers behalf
+    if (User.IsInRole("Manager") || User.IsInRole("Staff"))
+    {
+
+        if (p.Stock > 0)
+        {
+            <form autocomplete="off" action="/action_page.php">
+
+                <input class="customButton" type="submit" name="btnSearch" id="btnSearch" value="Search" />
+                <div class="autocomplete">
+                    <input class="customButton" type="search" name="txtCustomerSearch" id="myInput" style="cursor:text !important" placeholder="customer username..." />
+                </div>
+                <input class="customButton" type="submit" name="AddToCustomerBasket" value="Add To Customer Basket" />
+            </form>
+        }
+    }
+    else
+    {
+        if (p.Stock > 0)
+        {
+            <div style="padding-left:10%">
+                <input class="customButton" type="submit" name="Add To Basket" value="Add to Basket" />
+            </div>
+        }
+    }
+
+
+    //this section is for making a review, and will only appear to Customer roles
+    <h3>User Reviews</h3>
+    if (User.IsInRole("Customer"))
+    {
+        <section class="ReviewDivDivDiv" style="padding-bottom:30px !important;">
+
+            <input class="customButton" style="width:500px !important" type="search" name="txtComment" id="txtComment" value="Leave a Review" onclick="clearText()" />
+
+            <div class="dropdown">
+
+                <div class="customButton" data-toggle="dropdown" href="#">
+                    Comment
+                    <span class="caret"></span>
+
+                </div>
+                <table class="dropdown-menu" style="cursor:pointer !important" role="menu">
+                    <tr>
+                        <td>
+                            <input type="image" alt="submit" src="@Url.Content("~/Content/Images/Star.png")" height="25" width="25" onclick="set(1)" onmouseover="oneStarHover()" onmouseout="oneStarNormal(this)" id="1Star" />
+                            <input type="image" alt="submit" src="@Url.Content("~/Content/Images/Star.png")" height="25" width="25" onclick="set(2)" onmouseover="twoStarHover()" onmouseout="oneStarNormal(this)" id="2Star" />
+                            <input type="image" value="" alt="Submit" src="@Url.Content("~/Content/Images/Star.png")" height="25" width="25" onclick="set(3)" onmouseover="threeStarHover()" onmouseout="oneStarNormal(this)" id="3Star" />
+                            <input type="image" value="" alt="Submit" src="@Url.Content("~/Content/Images/Star.png")" height="25" width="25" onclick="set(4)" onmouseover="fourStarHover()" onmouseout="oneStarNormal(this)" id="4Star" />
+                            <input type="image" value="" alt="Submit" src="@Url.Content("~/Content/Images/Star.png")" height="25" width="25" onclick="set(5)" onmouseover="fiveStarHover()" onmouseout="oneStarNormal(this)" id="5Star" />
+                        </td>
+                    </tr>
+
+
+                </table>
+            </div>
+
+        </section>
+    }
+    <section style="border: 2px solid gold; border-radius:8px;">
+
+        @*
+            this displays all customer reviews for a particular product
+        *@
+
+        @for (int i = 0; i < p.Reviews.Count(); i++)
+        {
+
+            <section class="ReviewDivDivDiv">
+                <div class="ReviewBigBig2">
+                    @p.Reviews[i].User.UserName
+                </div>
+                <div class="ReviewDivDivDiv">
+                    "@p.Reviews[i].Comment"
+                </div>
+                <div class="ReviewDivDivDiv">
+
+                    @if (p.Reviews[i].Rating == 5)
+                    {
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+
+                    }
+                    else if (p.Reviews[i].Rating == 4)
+                    {
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+
+                    }
+                    else if (p.Reviews[i].Rating == 3)
+                    {
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+
+                    }
+                    else if (p.Reviews[i].Rating == 2)
+                    {
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+
+                    }
+                    else if (p.Reviews[i].Rating == 1)
+                    {
+                        <img src="@Url.Content("~/Content/Images/Star.png")" height="15" width="15" />
+
+                    }
+                </div>
+            </section>
+
+        }
+    </section>
+
+    @Html.ActionLink("back to list", "Index", "Home")
+}
+<script>
+    //this function clears the text in the search bar when a user click on it
+   function clearText() {
+        var x = document.getElementById("txtComment")
+        x.value = "";
+
+                }
+
+    //these next five functions are all responmsible for making the stars light up when hovered over
+    //they replace images based on cursor position
+    //for example if the curser is over the third star the first three stars will be gold and the last two grey
+
+    function oneStarHover() {
+
+        var two = document.getElementById("2Star");
+        two.src = "@Url.Content("~/Content/Images/StarHollow.png")";
+
+        var three = document.getElementById("3Star");
+        three.src = "@Url.Content("~/Content/Images/StarHollow.png")";
+
+        var four = document.getElementById("4Star");
+        four.src = "@Url.Content("~/Content/Images/StarHollow.png")";
+
+         var five = document.getElementById("5Star");
+         five.src = "@Url.Content("~/Content/Images/StarHollow.png")";
+
+
+    }
+    function twoStarHover() {
+          var two = document.getElementById("2Star");
+        two.src = "@Url.Content("~/Content/Images/Star.png")";
+
+         var three = document.getElementById("3Star");
+        three.src = "@Url.Content("~/Content/Images/StarHollow.png")";
+
+         var four = document.getElementById("4Star");
+        four.src = "@Url.Content("~/Content/Images/StarHollow.png")";
+
+         var five = document.getElementById("5Star");
+           five.src = "@Url.Content("~/Content/Images/StarHollow.png")";
+
+
+                }
+
+    function threeStarHover() {
+
+        var two = document.getElementById("2Star");
+        two.src = "@Url.Content("~/Content/Images/Star.png")";
+
+         var three = document.getElementById("3Star");
+        three.src = "@Url.Content("~/Content/Images/Star.png")";
+
+
+         var four = document.getElementById("4Star");
+        four.src = "@Url.Content("~/Content/Images/StarHollow.png")";
+
+         var five = document.getElementById("5Star");
+           five.src = "@Url.Content("~/Content/Images/StarHollow.png")";
+
+
+                }
+
+    function fourStarHover() {
+
+        var two = document.getElementById("2Star");
+        two.src = "@Url.Content("~/Content/Images/Star.png")";
+
+         var three = document.getElementById("3Star");
+        three.src = "@Url.Content("~/Content/Images/Star.png")";
+
+
+         var four = document.getElementById("4Star");
+        four.src = "@Url.Content("~/Content/Images/Star.png")";
+
+         var five = document.getElementById("5Star");
+           five.src = "@Url.Content("~/Content/Images/StarHollow.png")";
+
+
+                }
+
+       function fiveStarHover() {
+         var five = document.getElementById("5Star");
+           five.src = "@Url.Content("~/Content/Images/Star.png")";
+
+                }
+
+    //this function returns star images to gold when the cursor moves away
+    function oneStarNormal(x) {
+        x.src = "@Url.Content("~/Content/Images/Star.png")";
+
+
+
+                }
+
+    //this function sets the value of a hidden input that the back requests to the value a user selects to represent a star rating on a new comment
+    function set(i){
+
+        var x = document.getElementById("rating");
+        x.value = i;
+
+    }
+
+
+     function autocomplete(inp, arr) {
+            /*the autocomplete function takes two arguments,
+            the text field element and an array of possible autocompleted values:*/
+            var currentFocus;
+            /*execute a function when someone writes in the text field:*/
+            inp.addEventListener("input", function (e) {
+                var a, b, i, val = this.value;
+                /*close any already open lists of autocompleted values*/
+                closeAllLists();
+                if (!val) { return false; }
+                currentFocus = -1;
+                /*create a DIV element that will contain the items (values):*/
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                /*append the DIV element as a child of the autocomplete container:*/
+                this.parentNode.appendChild(a);
+                /*for each item in the array...*/
+                for (i = 0; i < arr.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        /*create a DIV element for each matching element:*/
+                        b = document.createElement("DIV");
+                        /*make the matching letters bold:*/
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].substr(val.length);
+                        /*insert a input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        /*execute a function when someone clicks on the item value (DIV element):*/
+                        b.addEventListener("click", function (e) {
+                            /*insert the value for the autocomplete text field:*/
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            /*close the list of autocompleted values,
+                            (or any other open lists of autocompleted values:*/
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            /*execute a function presses a key on the keyboard:*/
+            inp.addEventListener("keydown", function (e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    /*If the arrow DOWN key is pressed,
+                    increase the currentFocus variable:*/
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 38) { //up
+                    /*If the arrow UP key is pressed,
+                    decrease the currentFocus variable:*/
+                    currentFocus--;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        /*and simulate a click on the "active" item:*/
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+            function addActive(x) {
+                /*a function to classify an item as "active":*/
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+            function closeAllLists(elmnt) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
+
+
+
+
+        /*An array containing all the Product names:*/
+        var countries= @Html.Raw(Json.Encode(@ViewBag.autofill)); //["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla", "Antigua & Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia & Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central Arfrican Republic", "Chad", "Chile", "China", "Colombia", "Congo", "Cook Islands", "Costa Rica", "Cote D Ivoire", "Croatia", "Cuba", "Curacao", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Polynesia", "French West Indies", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauro", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Pierre & Miquelon", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "St Kitts & Nevis", "St Lucia", "St Vincent", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor L'Este", "Togo", "Tonga", "Trinidad & Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks & Caicos", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Virgin Islands (US)", "Yemen", "Zambia", "Zimbabwe"];
+
+
+
+
+
+
+
+        /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+        autocomplete(document.getElementById("myInput"), countries);
+</script>
+

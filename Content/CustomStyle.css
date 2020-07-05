@@ -1,0 +1,380 @@
+﻿body {
+}
+
+.navbar {
+    background-color: #100f0f;
+    border: none;
+    font-family: Calibri;
+    font-size: large;
+    max-height: 50px;
+}
+
+    .navbar:hover {
+        background-color: black;
+    }
+
+
+.nav.navbar-nav.navbar-right li a {
+    color: #fcff00;
+}
+
+    .nav.navbar-nav.navbar-right li a:hover {
+        color: white
+    }
+
+.customButton {
+    border-radius: 8px;
+    border: 2px solid gold;
+    background-color: white;
+    color: black;
+    padding: 14px 28px;
+    font-size: 14px;
+    
+    
+}
+
+      
+
+
+    
+
+.categoryButton {
+}
+
+input.categoryButton {
+    border: 3px solid #fcf700;
+    padding: 10px 10px;
+    font-size: 14px;
+    max-height: 60px;
+    max-width: 99px;
+    min-height: 60px;
+    min-width: 99px;
+    background-color: white;
+    /*cursor: text !important*/;
+}
+
+.categoryButton:hover {
+    background-color: #fefa56;
+}
+
+
+
+.notification {
+    background-color: #555;
+    color: #575757;
+    text-decoration: red;
+    padding: 15px 26px;
+    position: relative;
+    display: inline-block;
+    border-radius: 2px;
+}
+
+
+
+
+
+
+
+.container2 {
+    position: absolute;
+    width: 40px;
+    height: 28px;
+    padding-top: 9px;
+    padding-left: 3px;
+    padding-right: 3px;
+    cursor: pointer;
+}
+
+
+
+    .container2 img {
+        width: 100%;
+        height: auto;
+    }
+
+
+
+.badge {
+    max-height: 20px;
+    max-width: 10px;
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    /*padding: 6px 4px;*/
+    /*border-radius: 90%;*/
+    background: none;
+    color: #575757;
+    font-size: 13px;
+}
+
+
+.textInput {
+    border-radius: 8px;
+    border: 2px solid gold;
+    background-color: white;
+    color: black;
+    padding: 14px 28px;
+    font-size: 14px;
+    cursor: pointer;
+    height: 20px;
+    width: 300px;
+    cursor:text;
+}
+
+
+
+    /*.section textInput {
+        border-radius: 8px;
+        border: 2px solid gold;
+        background-color: pink;
+        color: black;
+        padding: 14px 28px;
+        font-size: 16px;
+        cursor: pointer;
+        height: 20px;
+        width: 60%;
+        
+    }*/
+
+
+
+
+    .textInput:focus {
+    }
+
+.CustomHeading {
+    font-family: Calibri;
+    font-size: 32px;
+    padding-bottom: 80px;
+    padding-top: 30px;
+    
+    padding-right: 45%;
+
+    border-bottom: thin black;
+}
+
+    .CustomHeading section {
+        font-family: Calibri;
+        font-size: 32px;
+        padding-bottom: 80px;
+        padding-top: 30px;
+        padding-right: 45%;
+        border-bottom: thin black;
+    }
+
+#CustomCustomCustom {
+    display: flex;
+    align-items: center;
+    padding-bottom: 50px;
+    color: black;
+    font-size: 16px;
+    height: 20px;
+    width: 700px;
+    display: flex;
+    justify-content: space-between;
+    
+    padding-left:25%;
+}
+
+div .CustomCustomCustom {
+    flex: 8;
+}
+
+
+.StockDivDivDiv {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    /*justify-content: center;*/
+    font-family: Calibri;
+    flex: 1;
+    padding-left: 100px;
+}
+
+
+.dropDropDrop {
+    height: 20px;
+    font-family: Calibri;
+    font-size: 16px;
+    padding-left: 50%;
+    padding-bottom: 20px;
+}
+
+.ViewProdProdProd {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-style: normal;
+    font-family: Calibri;
+    flex: 1;
+    padding-left: 50px;
+    padding-bottom: 20px;
+}
+
+
+
+.ReviewDivDivDiv {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-style: italic;
+    font-family: Calibri;
+    flex: 1;
+    padding-left: 50px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.ReviewBigBig {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-style: normal;
+    font-family: Calibri;
+    flex: 1;
+    padding-left: 50px;
+    padding-top: 20px;
+}
+
+.ReviewBigBig2 {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-style: normal;
+    font-family: Calibri;
+    flex: 1;
+    padding-left: 50px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+
+#ViewOrder {
+    display: flex;
+    align-items: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    color: black;
+    font-size: 16px;
+    height: 20px;
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+div #ViewOrder {
+    flex: 8;
+    font-family: Calibri;
+}
+
+.ViewOrderButton {
+    font-family: Calibri;
+    border-radius: 8px;
+    border: 2px solid gold;
+    background-color: #fefa56;
+    color: black;
+}
+
+    .ViewOrderButton:hover {
+        background-color: #eaac00;
+        color: white;
+    }
+
+.picturePicturPicture {
+    display: flex;
+    align-items: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    color: black;
+    font-size: 16px;
+    height: 20px;
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+
+div .picturePicturPicture {
+    display: none;
+    font-family: Calibri;
+}
+
+.autocomplete {
+    position: relative;
+    display: inline-block;
+}
+
+/*input {
+    border: 1px solid transparent;
+    background-color: #f1f1f1;
+    padding: 10px;
+    font-size: 16px;
+}
+
+    input[type=text] {
+        background-color: #f1f1f1;
+        width: 100%;
+    }
+
+    input[type=submit] {
+        background-color: DodgerBlue;
+        color: #fff;
+        cursor: pointer;
+    }*/
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+
+    .autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
+    }
+
+        /*when hovering an item:*/
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+}
+
+.ViewProductButton {
+    font-family: Calibri;
+    font-size: 16px;
+   
+    border: 2px solid gold;
+   
+    color: black;
+    border-radius: 8px;
+    
+    background-color: white;
+    color: black;
+    padding: 8px 12px;
+   
+}
+
+    /*.ViewProductButton:hover {
+        background-color: #eaac00;
+        color: white;
+    }*/
+
+
+

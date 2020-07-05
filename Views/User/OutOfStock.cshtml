@@ -1,0 +1,18 @@
+﻿@using CustomComputers.Models
+@{
+    Product p = ViewBag.Prod;
+}
+    <div style="padding-left:40% !important">
+        <img src="@Url.Content(p.Image)" height="100" width="100" />
+    </div>
+<div class="customButton"style="padding-right:-30% !important">
+
+    Sorry, It seems we do not have enough @p.Name stock to satisfy your demands.
+</div>
+<div>
+    @Html.ActionLink("Continue Shopping", "Index", "Home")
+</div>
+
+<div>
+    @Html.ActionLink("View Orders", "SeeOrders", "Order")
+</div>

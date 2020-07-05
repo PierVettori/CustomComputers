@@ -1,0 +1,75 @@
+﻿
+
+
+@using CustomComputers.Models
+@{
+    Staff staff = ViewBag.Staff;//staff object from the back
+
+
+}
+@model Staff
+<div class="heading">Edit Details</div>
+@*this displays Staff infromation and allows Staff to submit changes*@
+@using (Html.BeginForm("ProcessStaff", "User", FormMethod.Get))
+{
+    if (staff != null)
+    {
+        @Html.HiddenFor(m => m.Id)
+
+
+        <div id="CustomCustomCustom">
+
+            <div>Username: </div>
+            <div>@Html.TextBoxFor(m => m.UserName, new { @class = "textInput" })</div>
+        </div>
+        <div id="CustomCustomCustom">
+
+            <div>First Name:</div>
+            <div>@Html.TextBoxFor(m => m.FirstName, new { @class = "textInput" })</div>
+        </div>
+        <div id="CustomCustomCustom">
+
+
+            <div>Last Name: </div>
+            <div>@Html.TextBoxFor(m => m.LastName, new { @class = "textInput" })</div>
+        </div>
+
+        <div id="CustomCustomCustom">
+
+
+            <div>Address Line 1:</div>
+            <div>@Html.TextBoxFor(m => m.AddressLn1, new { @class = "textInput" })</div>
+        </div>
+        <div id="CustomCustomCustom">
+
+
+            <div> Address Line 2:</div>
+            <div>@Html.TextBoxFor(m => m.AddressLn2, new { @class = "textInput" })</div>
+        </div>
+        <div id="CustomCustomCustom">
+
+
+            <div> Town: </div>
+            <div>@Html.TextBoxFor(m => m.Town, new { @class = "textInput" })</div>
+        </div>
+        <div id="CustomCustomCustom">
+
+
+            <div>Post Code: </div>
+            <div>@Html.TextBoxFor(m => m.PostCode, new { @class = "textInput" })</div>
+        </div>
+        <div id="CustomCustomCustom">
+
+            <div> Email:</div>
+            <div>@Html.TextBoxFor(m => m.Email, new { @class = "textInput" })</div>
+        </div>
+        <div>
+            <input class="customButton yellow" type="submit" value="Save changes" />
+        </div>
+
+
+
+    }
+
+
+}

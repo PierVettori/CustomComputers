@@ -1,0 +1,113 @@
+﻿@using CustomComputers.Models
+@using Microsoft.AspNet.Identity;
+@model User
+@{
+
+    ApplicationDbContext db = new ApplicationDbContext();// an instance of ApplicationDbContext
+
+    string userId = User.Identity.GetUserId();//this gets a string of the loggedin users Id
+
+    List<User> users = db.Users.ToList();// this grabs all the users from the database
+
+    users.Remove(db.Users.Find(userId));// this removes the current user from the list
+
+    //some more counters to be incremented
+    int counter = 0;
+    int idCounter = 30;
+
+
+}
+
+<h2>EditRole</h2>
+
+
+
+
+
+
+
+@using (Html.BeginForm("ChangeUserRoles", "User", FormMethod.Get, new { @class = "form-horizontal", role = "form" }))//this begins the form
+{
+    @*these two are hidden inputs to have their values changed the back can then request these by name and get desired information*@
+    <input type="hidden" id="role" name="role" value="" />
+    <input type="hidden" id="userId" name="userId" value="" />
+
+    <table class="table">
+        <tr>
+            <th>
+                All Users
+            </th>
+        </tr>
+        @foreach (var m in users)
+        {
+
+            idCounter++;//incremented by 1
+
+
+            <tr>
+                <td>
+                    @m.UserName
+                    <input type="hidden" id="@idCounter" value="@m.Id" />
+                    @*this hidden input holds the members Id
+                        its id is the incremented counter*@
+                </td>
+
+
+                <td class="dropdown">
+                    @*this is a dropdown menu*@
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        @m.Role @*this displays the users current role*@
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+
+
+                        @foreach (var b in db.Roles.ToList())//this increments the counter by 1 for each entry in the Roles table in the database
+                        {
+                            counter++;
+                            <li>
+
+
+                                <input type="submit" class="btn btn-default" id="@counter" name="UserRole" value="@b.Name" onclick="find(@counter,@idCounter)" />
+                            </li>
+                        }
+                        @*a button is made for each role and when it is clicked it changes the value of the two hidden inputs at the top
+                            to the users Id and the new role*@
+
+                    </ul>
+
+
+
+                </td>
+            </tr>
+        }
+
+
+    </table>
+}
+
+
+<script>
+
+
+    //this function finds a users id and their role
+    //the top two inputs are changed to these values
+    function find(i, z) {
+
+
+
+        var y = document.getElementById(z).value;
+        var userId = document.getElementById("userId");
+
+        userId.value = y;
+
+        var x = document.getElementById(i).value;
+        var role = document.getElementById("role");
+
+        role.value = x;
+
+    }
+
+
+
+</script>

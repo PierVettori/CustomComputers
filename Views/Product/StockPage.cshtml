@@ -1,0 +1,68 @@
+﻿
+@using CustomComputers.Models
+@{
+    List<Product> products = ViewBag.Products;
+
+    //counters to find ids for Products and values of stock to be added
+    int counter = 0;
+    int counter2 = 1;
+}
+
+<h2>StockPage</h2>
+
+@using (Html.BeginForm("ProcessStockPage", "Product", FormMethod.Get))
+{
+    //these are the values that the back will request to add stock to particular products that the user has interacted with
+    <input type="hidden" name="prodId" value="" id="prodId" />
+    <input type="hidden" name="addedStock" value="false" id="addedStock" />
+
+    foreach (Product p in products)
+    {
+        counter++;
+        counter2 = counter * 1000;//this multiplication is so that the two numbers never intersect
+        
+        //this next section dispays product information
+        <section class="StockDivDivDiv">
+
+            <div class="StockDivDivDiv">
+                @p.Name
+            </div>
+            <div class="StockDivDivDiv">
+                <img src="@Url.Content(p.Image)" height="100" width="100" />
+            </div>
+            <div class="StockDivDivDiv">
+                Current Stock level: @p.Stock
+            </div>
+            <div class="StockDivDivDiv">
+                <input type="number" id="@counter2" />
+            </div>
+            <div class="StockDivDivDiv">
+                <input type="hidden" value="@p.Id" id="@counter" />@*this input holds the product id*@
+                <input class="customButton" type="submit" name="addStock" value="add Stock" onclick="getProdId(@counter, @counter2)" />@*this button submits the form and changes the value of the top hidden inputs to the values of this product id and the stock entered into the input*@
+            </div>
+        </section>
+
+    }
+}
+
+
+<script>
+
+    
+    //this function gets the id of the product being interacted with and sets the top two hidden inputs to the products Id and added stock
+    //
+    function getProdId(i,z) {
+        var x = document.getElementById(i).value//this is the product id
+        var id = document.getElementById("prodId");//this is the top hidden input
+        id.value = x;//this sets the top hidden inputs value to the product id
+
+        var y = document.getElementById(z).value//this is the added stock value
+        if (y != 0) {//this validates entry
+            var stock = document.getElementById("addedStock");//this is the top hidden input
+            stock.value = y;//this sets the top hidden inputs value to the added stock value
+        }
+        
+    }
+
+    
+</script>

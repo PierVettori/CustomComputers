@@ -1,0 +1,24 @@
+﻿@{ 
+    double Charge = ViewBag.Total * 100;
+}
+
+
+
+
+    <form action="~/Stripe/Charge" method="POST">
+
+        <input type="hidden" name="Total" value="@Charge" />
+        <input type="hidden" name="OrderId" value="@ViewBag.OrderId" />
+        
+
+        <article>
+            <label>Amount: £@ViewBag.Total</label>
+        </article>
+        <script src="//checkout.stripe.com/v2/checkout.js"
+                class="stripe-button"
+                data-key="@ViewBag.StripePublishKey"
+                data-locale="auto"
+                data-description="Sample Charge"
+                data-amount="@Charge">
+        </script>
+    </form>

@@ -1,0 +1,136 @@
+﻿
+@using CustomComputers.Models
+@{
+    List<CustomerOrder> orders = ViewBag.Orders;//a list of orders from the back
+  
+    //these next two counters help find order Id with a javascript function at the bottom
+    int counter = 0;
+
+    int counter2 = 1;
+
+    int basketIdCounter = 1;//this counter helps find an orderLine Id with a JavaScript function
+
+    string msg = " Paid";
+}
+
+<h1> All Orders</h1>
+@using (Html.BeginForm("ProcessViewAllOrders", "Order", FormMethod.Get))
+{
+    //these two hidden inputs will hold OrderId and BasketId of the order or basket that the user is interacting with respectively
+    
+    <input type="hidden" name="orderId" id="orderId" />
+    <input type="hidden" name="basketId" id="basketId" />
+
+    //this displays all orders
+    foreach (CustomerOrder o in orders)
+    {
+        counter++;
+        counter2 = counter * 10000;
+
+            <div id="ViewOrder">
+                
+                <div>
+                    Total: @o.Total
+                </div>
+                <div>
+                    @o.BasketItems.Count() Items
+                </div>
+                <div>
+                    @o.GetCustomer.UserName
+                </div>
+                
+                <div>
+                    @*//this is a button that wil lshow up if the order is unpaid*@
+                    @if (o.Payment == false)
+                    {
+                        <input class="ViewOrderButton" type="submit" name="Checkout" value="CheckOut" onclick="getOrderId(@counter2)" />
+
+                        
+                    }
+                    //or a mesage sayin the order is paid for
+                    else
+                    {
+                        @o.Date.ToShortDateString() @msg
+                    }
+                    <input class="ViewOrderButton" type="button" value="View Order" onclick="show(@counter)" />
+                    <input type="hidden" value="@o.Id" id="@counter2" />
+                    <input class="ViewOrderButton" type="submit" name="Cancel" value="Delete Order" onclick="getOrderId(@counter2)" />
+                </div>
+            </div>
+
+
+            //this is a hidden part of the page that will apear on the button click
+        <div id=@counter class="picturePicturPicture">
+            @foreach (Basket b in o.BasketItems)
+            {
+                basketIdCounter = counter2 *100;
+                <table class="table">
+                    <tr>
+                        <td>
+                            @b.Product.Name
+                        </td>
+                        <td>
+                            Quantity: @b.Quantity
+                        </td>
+                        <td>
+                            £ @b.Product.Price
+                        </td>
+                        <td>
+                            <img src="@Url.Content(b.Product.Image)" height="100" width="100" />
+                        </td>
+                        <td>
+                            <input type="hidden" value="@b.Id" id="@basketIdCounter" />
+                            <input class="ViewOrderButton" type="submit" name="DeleteItem" value="Delete Item" onclick="getBasketId(@basketIdCounter)" />
+                        </td>
+                    </tr>
+                </table>
+            }
+        </div>
+
+
+
+
+
+
+
+    }
+}
+
+
+
+<script>
+    //this function shows order information by the order id 
+    //it finds the id by one of the incremented counters and sets the css property to display
+    function show(i) {
+
+        var picture = document.getElementById(i);
+
+        if (picture.style.display === "unset") {
+            picture.style.display = "none";
+        }
+        else {
+            picture.style.display = "unset";
+        }
+
+    }
+
+    //these two functions work the same way
+    //they find the id of an order by the incremented counter and set the hidden input at the tops value to that orders Id
+    function getOrderId(i) {
+        var x = document.getElementById(i).value
+        var id = document.getElementById("orderId");
+        id.value = x;
+    }
+
+    function getBasketId(i) {
+        var x = document.getElementById(i).value
+        var id = document.getElementById("basketId");
+        id.value = x;
+    }
+
+
+
+
+
+
+</script>
